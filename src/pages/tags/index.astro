@@ -4,7 +4,6 @@ import BaseLayout from '../../components/BaseLayout.astro';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 
-// 统计标签出现次数
 const tagCount = new Map<string, number>();
 allPosts.forEach(post => {
   post.data.tags.forEach(tag => {
@@ -16,21 +15,25 @@ const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
 <BaseLayout title="标签">
-  <div class="mx-auto max-w-3xl px-6 py-16">
-    <h1 class="text-3xl font-bold text-[var(--color-text)] mb-2">标签</h1>
-    <p class="text-[var(--color-text-secondary)] mb-12">{tags.length} 个标签</p>
+  <div class="container-narrow py-16 animate-fade-in">
+    <h1 class="text-2xl font-bold tracking-tight text-[var(--c-text)] mb-1">标签</h1>
+    <p class="text-[var(--c-text-muted)] mb-10">{tags.length} 个标签，{allPosts.length} 篇文章</p>
 
-    <div class="flex flex-wrap gap-3">
+    <div class="flex flex-wrap gap-2.5">
       {tags.map(([tag, count]) => (
         <a
           href={`/tags/${encodeURIComponent(tag)}`}
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg no-underline
-                 border border-[var(--color-border)] text-[var(--color-text)]
-                 hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)]
-                 transition-colors"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                 border border-[var(--c-border)] bg-[var(--c-bg)]
+                 hover:bg-[var(--c-accent-soft)] hover:border-[var(--c-accent)]
+                 transition-all duration-150 no-underline group"
         >
-          <span>#{tag}</span>
-          <span class="text-xs text-[var(--color-text-secondary)]">{count}</span>
+          <span class="text-sm font-medium text-[var(--c-text)] group-hover:text-[var(--c-accent)] transition-colors">
+            {tag}
+          </span>
+          <span class="text-xs text-[var(--c-text-muted)] tabular-nums bg-[var(--c-bg-inset)] px-1.5 py-0.5 rounded-full">
+            {count}
+          </span>
         </a>
       ))}
     </div>

@@ -3,6 +3,8 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../components/BaseLayout.astro';
 import TagBadge from '../../components/TagBadge.astro';
 import CommentSection from '../../components/CommentSection.astro';
+import ProgressBar from '../../components/ProgressBar.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import { formatDate } from '../../utils/formatDate';
 import { readTime } from '../../utils/readTime';
 import { getSlug } from '../../utils/slug';
@@ -20,10 +22,9 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 const minutes = readTime(post.body || '');
 
-// Giscus 配置（部署前替换为实际值）
 const giscusConfig = {
   repo: 'YOUR_USERNAME/YOUR_REPO',
   repoId: 'YOUR_REPO_ID',
@@ -35,29 +36,46 @@ const giscusConfig = {
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
+  type="article"
 >
-  <article class="mx-auto max-w-3xl px-6 py-16">
+  <ProgressBar />
+
+  <article class="container-narrow py-16 animate-fade-in">
+    <!-- Header -->
     <header class="mb-12">
-      <div class="flex items-center gap-3 text-sm text-[var(--color-text-secondary)] mb-4">
+      <div class="flex items-center gap-3 text-sm text-[var(--c-text-muted)] mb-4 font-medium">
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
-        <span>·</span>
-        <span>{minutes} 分钟阅读</span>
+        <span aria-hidden="true">·</span>
+        <span>{minutes} min read</span>
       </div>
-      <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] mb-4">
+
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--c-text)] mb-4 leading-tight">
         {post.data.title}
       </h1>
-      <p class="text-lg text-[var(--color-text-secondary)] mb-6">
+
+      <p class="text-lg text-[var(--c-text-secondary)] leading-relaxed mb-5">
         {post.data.description}
       </p>
-      <div class="flex flex-wrap gap-2">
+
+      <div class="flex flex-wrap gap-1.5">
         {post.data.tags.map(tag => <TagBadge tag={tag} />)}
       </div>
     </header>
 
+    <!-- TOC -->
+    {headings && headings.length > 1 && (
+      <TableOfContents headings={headings} />
+    )}
+
+    <!-- Content -->
     <div class="article-content">
       <Content />
     </div>
 
+    <!-- Divider -->
+    <hr />
+
+    <!-- Comments -->
     <CommentSection
       repo={giscusConfig.repo}
       repoId={giscusConfig.repoId}

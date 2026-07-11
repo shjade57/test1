@@ -14,18 +14,23 @@ interface Props {
 const { title, description, date, tags, slug, readMinutes } = Astro.props;
 ---
 
-<article class="group border-b border-[var(--color-border)] last:border-b-0">
-  <a href={`/blog/${slug}`} class="block py-8 no-underline">
-    <div class="flex items-center gap-3 text-sm text-[var(--color-text-secondary)] mb-3">
+<article class="group">
+  <a href={`/blog/${slug}`} class="block py-6 -mx-3 px-3 rounded-lg hover:bg-[var(--c-bg-raised)] transition-colors duration-150">
+    <div class="flex items-center gap-3 text-sm text-[var(--c-text-muted)] mb-2.5 font-medium">
       <time datetime={date.toISOString()}>{formatDate(date)}</time>
-      <span>·</span>
-      <span>{readMinutes} 分钟阅读</span>
+      <span aria-hidden="true">·</span>
+      <span>{readMinutes} min read</span>
     </div>
-    <h2 class="text-xl font-semibold text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors mb-2">
+
+    <h2 class="text-lg font-semibold text-[var(--c-text)] group-hover:text-[var(--c-accent)] transition-colors mb-1.5 leading-snug">
       {title}
     </h2>
-    <p class="text-[var(--color-text-secondary)] leading-relaxed mb-3">{description}</p>
-    <div class="flex flex-wrap gap-2">
+
+    <p class="text-[var(--c-text-secondary)] text-sm leading-relaxed mb-3 line-clamp-2">
+      {description}
+    </p>
+
+    <div class="flex flex-wrap gap-1.5">
       {tags.map(tag => <TagBadge tag={tag} />)}
     </div>
   </a>

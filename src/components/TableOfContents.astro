@@ -1,0 +1,33 @@
+---
+// 从文章内容中提取 h2 标题生成目录
+export interface TocHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings?: TocHeading[];
+}
+const { headings = [] } = Astro.props;
+---
+
+{headings.length > 1 && (
+  <nav class="mb-12 p-5 surface text-sm">
+    <h4 class="text-xs font-semibold uppercase tracking-widest text-[var(--c-text-muted)] mb-3">
+      目录
+    </h4>
+    <ul class="space-y-1.5">
+      {headings.filter(h => h.depth <= 2).map(heading => (
+        <li style={`padding-left: ${(heading.depth - 1) * 0.75}rem`}>
+          <a
+            href={`#${heading.slug}`}
+            class="text-[var(--c-text-secondary)] hover:text-[var(--c-accent)] transition-colors leading-relaxed"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

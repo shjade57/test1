@@ -3,30 +3,30 @@ import BaseLayout from '../components/BaseLayout.astro';
 ---
 
 <BaseLayout title="关于">
-  <div class="mx-auto max-w-3xl px-6 py-16">
-    <h1 class="text-3xl font-bold text-[var(--color-text)] mb-8">关于我</h1>
+  <div class="container-narrow py-16 animate-fade-in">
+    <h1 class="text-2xl font-bold tracking-tight text-[var(--c-text)] mb-8">关于</h1>
 
-    <div class="space-y-6 text-[var(--color-text)] leading-relaxed">
-      <p>
-        你好，我是一名软件开发者，热爱技术，喜欢探索前沿工具和工程实践。
-      </p>
-      <p>
-        这个博客用于记录我在技术探索中的思考和总结，涉及前端开发、工程化、性能优化等方向。
-      </p>
-      <p>
-        如果我的文章对你有帮助，欢迎通过以下方式找到我：
-      </p>
+    <div class="prose-custom space-y-5 text-[var(--c-text)] leading-relaxed">
+      <p>你好，我是一名软件开发者，热爱技术，喜欢探索前沿工具和工程实践。</p>
+      <p>这个博客用于记录我在技术探索中的思考和总结，涉及前端开发、工程化、性能优化等方向。</p>
+      <p>如果我的文章对你有帮助，可以通过以下方式找到我：</p>
+    </div>
 
-      <div class="flex gap-4 pt-2">
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
-           class="text-[var(--color-primary)] hover:underline text-sm">
-          GitHub →
-        </a>
-        <a href="/rss.xml"
-           class="text-[var(--color-primary)] hover:underline text-sm">
-          RSS →
-        </a>
-      </div>
+    <div class="flex items-center gap-4 pt-6">
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--c-border)]
+                text-sm font-medium text-[var(--c-text)] hover:border-[var(--c-accent)] hover:text-[var(--c-accent)]
+                transition-all duration-150">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="/rss.xml"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--c-border)]
+                text-sm font-medium text-[var(--c-text)] hover:border-[var(--c-accent)] hover:text-[var(--c-accent)]
+                transition-all duration-150">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg>
+        RSS
+      </a>
     </div>
   </div>
 </BaseLayout>

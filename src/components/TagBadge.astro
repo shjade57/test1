@@ -1,18 +1,11 @@
 ---
-interface Props {
-  tag: string;
-}
-
+interface Props { tag: string; }
 const { tag } = Astro.props;
 ---
-
-<a
-  href={`/tags/${encodeURIComponent(tag)}`}
-  class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium no-underline
-         bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]
-         border border-[var(--color-border)]
-         hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)]
-         transition-colors"
->
-  #{tag}
+<a href={`/tags/${encodeURIComponent(tag)}`}
+   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+          bg-[var(--c-accent-soft)] text-[var(--c-accent)]
+          hover:bg-[var(--c-accent)] hover:text-white
+          transition-all duration-150 no-underline">
+  {tag}
 </a>

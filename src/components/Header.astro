@@ -1,18 +1,33 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+
+const currentPath = Astro.url.pathname;
+
+function navClass(path: string): string {
+  const base = 'text-sm transition-colors pb-0.5 border-b-2 border-transparent';
+  const match = path === '/'
+    ? currentPath === '/'
+    : currentPath.startsWith(path);
+  return match
+    ? `${base} text-[var(--c-text)] border-[var(--c-accent)]`
+    : `${base} text-[var(--c-text-secondary)] hover:text-[var(--c-text)]`;
+}
 ---
 
-<header class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur">
-  <nav class="mx-auto max-w-3xl flex items-center justify-between px-6 py-4">
-    <a href="/" class="text-xl font-bold text-[var(--color-text)] no-underline hover:text-[var(--color-primary)] transition-colors">
+<header class="sticky top-0 z-50 bg-[var(--c-bg)]/80 backdrop-blur-md border-b border-[var(--c-border)]">
+  <nav class="container-wide flex items-center justify-between h-14">
+    <a href="/" class="text-base font-semibold tracking-tight text-[var(--c-text)] hover:text-[var(--c-accent)] transition-colors">
       ~/blog
     </a>
-    <div class="flex items-center gap-6 text-sm">
-      <a href="/" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">首页</a>
-      <a href="/tags" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">标签</a>
-      <a href="/search" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">搜索</a>
-      <a href="/about" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">关于</a>
-      <ThemeToggle />
+
+    <div class="flex items-center gap-1">
+      <a href="/" class="px-3 py-1.5 rounded-md {navClass('/')}">首页</a>
+      <a href="/tags" class="px-3 py-1.5 rounded-md {navClass('/tags')}">标签</a>
+      <a href="/search" class="px-3 py-1.5 rounded-md {navClass('/search')}">搜索</a>
+      <a href="/about" class="px-3 py-1.5 rounded-md {navClass('/about')}">关于</a>
+      <div class="ml-2 pl-2 border-l border-[var(--c-border)]">
+        <ThemeToggle />
+      </div>
     </div>
   </nav>
 </header>

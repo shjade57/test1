@@ -8,14 +8,15 @@ export interface SEOProps {
 
 const {
   title,
-  description = '个人技术博客',
+  description = '个人技术博客 — 技术思考与学习记录',
   image,
   type = 'website',
 } = Astro.props;
 
+const siteName = '~/blog';
 const fullTitle = Astro.url.pathname === '/' || title === '首页'
-  ? 'My Tech Blog'
-  : `${title} | My Tech Blog`;
+  ? siteName
+  : `${title} · ${siteName}`;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 ---
@@ -24,15 +25,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Open Graph -->
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content={type} />
 <meta property="og:url" content={canonicalURL} />
-<meta property="og:site_name" content="My Tech Blog" />
+<meta property="og:site_name" content={siteName} />
 {image && <meta property="og:image" content={new URL(image, Astro.site).href} />}
 
-<!-- Twitter Card -->
 <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />

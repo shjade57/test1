@@ -1,12 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../components/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
 import PostCard from '../components/PostCard.astro';
 import Pagination from '../components/Pagination.astro';
 import { readTime } from '../utils/readTime';
 import { getSlug } from '../utils/slug';
 
-const POSTS_PER_PAGE = 5;
+const POSTS_PER_PAGE = 6;
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
@@ -19,23 +20,42 @@ const pagePosts = sortedPosts.slice(
 ---
 
 <BaseLayout title="首页">
-  <div class="mx-auto max-w-3xl px-6 py-16">
-    <h1 class="text-3xl font-bold text-[var(--color-text)] mb-2">文章</h1>
-    <p class="text-[var(--color-text-secondary)] mb-12">技术思考与学习记录</p>
+  {currentPage === 1 && <Hero />}
 
-    <div class="divide-y divide-[var(--color-border)]">
+  <div class="container-narrow pb-16">
+    <!-- Section header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--c-text-muted)]">
+          {currentPage === 1 ? '最新文章' : `第 ${currentPage} 页`}
+        </h2>
+      </div>
+      {totalPages > 1 && (
+        <span class="text-xs text-[var(--c-text-muted)] tabular-nums">
+          {sortedPosts.length} 篇文章
+        </span>
+      )}
+    </div>
+
+    <!-- Post list -->
+    <div class="divide-y divide-[var(--c-border)]">
       {pagePosts.length === 0 ? (
-        <p class="text-[var(--color-text-secondary)] py-12 text-center">还没有文章</p>
+        <div class="py-20 text-center">
+          <p class="text-[var(--c-text-muted)] text-lg">还没有文章</p>
+          <p class="text-[var(--c-text-muted)] text-sm mt-2">在 src/content/blog/ 下创建 .mdx 文件开始写作</p>
+        </div>
       ) : (
-        pagePosts.map(post => (
-          <PostCard
-            title={post.data.title}
-            description={post.data.description}
-            date={post.data.date}
-            tags={post.data.tags}
-            slug={getSlug(post.id)}
-            readMinutes={readTime(post.body || '')}
-          />
+        pagePosts.map((post, i) => (
+          <div style={`animation-delay: ${i * 60}ms`} class="animate-fade-in">
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              tags={post.data.tags}
+              slug={getSlug(post.id)}
+              readMinutes={readTime(post.body || '')}
+            />
+          </div>
         ))
       )}
     </div>

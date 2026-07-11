@@ -7,10 +7,7 @@ interface Props {
 
 const { currentPage, totalPages, basePath = '' } = Astro.props;
 
-if (totalPages <= 1) {
-  // 无需分页时渲染空 fragment
-  return;
-}
+if (totalPages <= 1) return;
 
 function pageUrl(page: number): string {
   if (page === 1) return basePath || '/';
@@ -18,28 +15,42 @@ function pageUrl(page: number): string {
 }
 ---
 
-<nav class="flex items-center justify-center gap-2 py-12">
+<nav class="flex items-center justify-center gap-3 py-12">
   {currentPage > 1 ? (
-    <a href={pageUrl(currentPage - 1)} class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text)] no-underline hover:bg-[var(--color-bg-secondary)] transition-colors text-sm">
-      ← 上一页
+    <a href={pageUrl(currentPage - 1)}
+       class="inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium
+              border border-[var(--c-border)] text-[var(--c-text)]
+              hover:border-[var(--c-accent)] hover:text-[var(--c-accent)]
+              transition-all duration-150">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      上一页
     </a>
   ) : (
-    <span class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] text-sm opacity-50 cursor-not-allowed">
-      ← 上一页
+    <span class="inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium
+                 border border-[var(--c-border)] text-[var(--c-text-muted)] opacity-50 cursor-not-allowed select-none">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      上一页
     </span>
   )}
 
-  <span class="px-4 py-2 text-sm text-[var(--color-text-secondary)]">
-    {currentPage} / {totalPages}
+  <span class="text-sm text-[var(--c-text-muted)] font-medium tabular-nums">
+    {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
   </span>
 
   {currentPage < totalPages ? (
-    <a href={pageUrl(currentPage + 1)} class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text)] no-underline hover:bg-[var(--color-bg-secondary)] transition-colors text-sm">
-      下一页 →
+    <a href={pageUrl(currentPage + 1)}
+       class="inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium
+              border border-[var(--c-border)] text-[var(--c-text)]
+              hover:border-[var(--c-accent)] hover:text-[var(--c-accent)]
+              transition-all duration-150">
+      下一页
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
     </a>
   ) : (
-    <span class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] text-sm opacity-50 cursor-not-allowed">
-      下一页 →
+    <span class="inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium
+                 border border-[var(--c-border)] text-[var(--c-text-muted)] opacity-50 cursor-not-allowed select-none">
+      下一页
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
     </span>
   )}
 </nav>
