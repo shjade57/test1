@@ -1,36 +1,45 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../components/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Pagination from '../components/Pagination.astro';
+import { readTime } from '../utils/readTime';
+import { getSlug } from '../utils/slug';
+
+const POSTS_PER_PAGE = 5;
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const currentPage = Number(Astro.url.searchParams.get('page') || 1);
+const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
+const pagePosts = sortedPosts.slice(
+  (currentPage - 1) * POSTS_PER_PAGE,
+  currentPage * POSTS_PER_PAGE
+);
 ---
-<html lang="zh-CN" class="">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Tech Blog</title>
-    <link rel="stylesheet" href="/src/styles/global.css" />
-    <script is:inline>
-      // 防止暗色模式闪烁：在页面渲染前设置 class
-      const theme = (() => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : '';
-      })();
-      if (theme === 'dark') document.documentElement.classList.add('dark');
-    </script>
-  </head>
-  <body class="min-h-screen flex flex-col items-center justify-center p-8">
-    <div class="text-center">
-      <h1 class="text-4xl font-bold text-[var(--color-text)]">Hello Blog</h1>
-      <p class="mt-4 text-[var(--color-text-secondary)]">Tailwind + 暗色模式就绪</p>
-      <button id="toggle" class="mt-6 px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-bg-secondary)] cursor-pointer">
-        切换暗色模式
-      </button>
+
+<BaseLayout title="首页">
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-bold text-[var(--color-text)] mb-2">文章</h1>
+    <p class="text-[var(--color-text-secondary)] mb-12">技术思考与学习记录</p>
+
+    <div class="divide-y divide-[var(--color-border)]">
+      {pagePosts.length === 0 ? (
+        <p class="text-[var(--color-text-secondary)] py-12 text-center">还没有文章</p>
+      ) : (
+        pagePosts.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            tags={post.data.tags}
+            slug={getSlug(post.id)}
+            readMinutes={readTime(post.body || '')}
+          />
+        ))
+      )}
     </div>
-    <script>
-      document.getElementById('toggle').addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-        const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        localStorage.setItem('theme', theme);
-      });
-    </script>
-  </body>
-</html>
+
+    <Pagination currentPage={currentPage} totalPages={totalPages} />
+  </div>
+</BaseLayout>

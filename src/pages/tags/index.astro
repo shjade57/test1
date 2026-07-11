@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/BaseLayout.astro';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// 统计标签出现次数
+const tagCount = new Map<string, number>();
+allPosts.forEach(post => {
+  post.data.tags.forEach(tag => {
+    tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+  });
+});
+
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="标签">
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-bold text-[var(--color-text)] mb-2">标签</h1>
+    <p class="text-[var(--color-text-secondary)] mb-12">{tags.length} 个标签</p>
+
+    <div class="flex flex-wrap gap-3">
+      {tags.map(([tag, count]) => (
+        <a
+          href={`/tags/${encodeURIComponent(tag)}`}
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg no-underline
+                 border border-[var(--color-border)] text-[var(--color-text)]
+                 hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)]
+                 transition-colors"
+        >
+          <span>#{tag}</span>
+          <span class="text-xs text-[var(--color-text-secondary)]">{count}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

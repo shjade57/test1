@@ -1,0 +1,45 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  basePath?: string;
+}
+
+const { currentPage, totalPages, basePath = '' } = Astro.props;
+
+if (totalPages <= 1) {
+  // 无需分页时渲染空 fragment
+  return;
+}
+
+function pageUrl(page: number): string {
+  if (page === 1) return basePath || '/';
+  return `${basePath}/page/${page}`;
+}
+---
+
+<nav class="flex items-center justify-center gap-2 py-12">
+  {currentPage > 1 ? (
+    <a href={pageUrl(currentPage - 1)} class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text)] no-underline hover:bg-[var(--color-bg-secondary)] transition-colors text-sm">
+      ← 上一页
+    </a>
+  ) : (
+    <span class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] text-sm opacity-50 cursor-not-allowed">
+      ← 上一页
+    </span>
+  )}
+
+  <span class="px-4 py-2 text-sm text-[var(--color-text-secondary)]">
+    {currentPage} / {totalPages}
+  </span>
+
+  {currentPage < totalPages ? (
+    <a href={pageUrl(currentPage + 1)} class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text)] no-underline hover:bg-[var(--color-bg-secondary)] transition-colors text-sm">
+      下一页 →
+    </a>
+  ) : (
+    <span class="px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] text-sm opacity-50 cursor-not-allowed">
+      下一页 →
+    </span>
+  )}
+</nav>

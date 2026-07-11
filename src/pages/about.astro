@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+---
+
+<BaseLayout title="关于">
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-bold text-[var(--color-text)] mb-8">关于我</h1>
+
+    <div class="space-y-6 text-[var(--color-text)] leading-relaxed">
+      <p>
+        你好，我是一名软件开发者，热爱技术，喜欢探索前沿工具和工程实践。
+      </p>
+      <p>
+        这个博客用于记录我在技术探索中的思考和总结，涉及前端开发、工程化、性能优化等方向。
+      </p>
+      <p>
+        如果我的文章对你有帮助，欢迎通过以下方式找到我：
+      </p>
+
+      <div class="flex gap-4 pt-2">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+           class="text-[var(--color-primary)] hover:underline text-sm">
+          GitHub →
+        </a>
+        <a href="/rss.xml"
+           class="text-[var(--color-primary)] hover:underline text-sm">
+          RSS →
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

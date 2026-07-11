@@ -1,0 +1,40 @@
+---
+title: "Tailwind CSS v4 最佳实践"
+description: "Tailwind v4 带来了 CSS-first 配置和更好的性能，本文记录迁移和使用的经验。"
+date: 2026-07-08
+tags: ["CSS", "Tailwind"]
+---
+
+## Tailwind v4 的变化
+
+Tailwind CSS v4 是一次重大更新，核心变化：
+
+- **CSS-first 配置**：不再需要 `tailwind.config.js`
+- **`@import "tailwindcss"`** 替代了 `@tailwind` 指令
+- **`@theme`** 块在 CSS 中进行自定义
+- **性能大幅提升**，构建速度显著加快
+
+```css
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2563eb;
+}
+```
+
+## Astro 中集成
+
+在 Astro 项目中使用 Vite 插件：
+
+```js
+// astro.config.mjs
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+就这么简单，无需额外配置。

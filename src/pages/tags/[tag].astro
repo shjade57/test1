@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { readTime } from '../../utils/readTime';
+import { getSlug } from '../../utils/slug';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const tags = new Set<string>();
+  posts.forEach(post => post.data.tags.forEach(tag => tags.add(tag)));
+
+  return [...tags].map(tag => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+
+const allPosts = await getCollection('blog', ({ data }) =>
+  !data.draft && data.tags.includes(tag!)
+);
+const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title={`#${tag}`}>
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-bold text-[var(--color-text)] mb-2">
+      #{tag}
+    </h1>
+    <p class="text-[var(--color-text-secondary)] mb-12">{sortedPosts.length} 篇文章</p>
+
+    <div class="divide-y divide-[var(--color-border)]">
+      {sortedPosts.length === 0 ? (
+        <p class="text-[var(--color-text-secondary)] py-12 text-center">暂无相关文章</p>
+      ) : (
+        sortedPosts.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            tags={post.data.tags}
+            slug={getSlug(post.id)}
+            readMinutes={readTime(post.body || '')}
+          />
+        ))
+      )}
+    </div>
+
+    <div class="pt-8 text-center">
+      <a href="/tags" class="text-[var(--color-primary)] hover:underline text-sm">← 查看所有标签</a>
+    </div>
+  </div>
+</BaseLayout>

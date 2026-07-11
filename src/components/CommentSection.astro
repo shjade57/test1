@@ -1,0 +1,40 @@
+---
+interface Props {
+  repo: string;        // 格式: "username/repo"
+  repoId: string;       // Giscus 生成的 repo ID
+  category: string;     // GitHub Discussions 分类名
+  categoryId: string;   // Giscus 生成的 category ID
+  mapping?: 'pathname' | 'url' | 'title' | 'og:title' | 'specific';
+}
+
+const {
+  repo,
+  repoId,
+  category,
+  categoryId,
+  mapping = 'pathname',
+} = Astro.props;
+---
+
+<section class="mt-16 pt-12 border-t border-[var(--color-border)]">
+  <h2 class="text-xl font-semibold text-[var(--color-text)] mb-6">评论</h2>
+  <div class="giscus"></div>
+  <script
+    src="https://giscus.app/client.js"
+    data-repo={repo}
+    data-repo-id={repoId}
+    data-category={category}
+    data-category-id={categoryId}
+    data-mapping={mapping}
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+  >
+  </script>
+</section>

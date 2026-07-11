@@ -1,0 +1,68 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../components/BaseLayout.astro';
+import TagBadge from '../../components/TagBadge.astro';
+import CommentSection from '../../components/CommentSection.astro';
+import { formatDate } from '../../utils/formatDate';
+import { readTime } from '../../utils/readTime';
+import { getSlug } from '../../utils/slug';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map(post => ({
+    params: { slug: getSlug(post.id) },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const minutes = readTime(post.body || '');
+
+// Giscus 配置（部署前替换为实际值）
+const giscusConfig = {
+  repo: 'YOUR_USERNAME/YOUR_REPO',
+  repoId: 'YOUR_REPO_ID',
+  category: 'Announcements',
+  categoryId: 'YOUR_CATEGORY_ID',
+};
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <header class="mb-12">
+      <div class="flex items-center gap-3 text-sm text-[var(--color-text-secondary)] mb-4">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <span>·</span>
+        <span>{minutes} 分钟阅读</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] mb-4">
+        {post.data.title}
+      </h1>
+      <p class="text-lg text-[var(--color-text-secondary)] mb-6">
+        {post.data.description}
+      </p>
+      <div class="flex flex-wrap gap-2">
+        {post.data.tags.map(tag => <TagBadge tag={tag} />)}
+      </div>
+    </header>
+
+    <div class="article-content">
+      <Content />
+    </div>
+
+    <CommentSection
+      repo={giscusConfig.repo}
+      repoId={giscusConfig.repoId}
+      category={giscusConfig.category}
+      categoryId={giscusConfig.categoryId}
+    />
+  </article>
+</BaseLayout>

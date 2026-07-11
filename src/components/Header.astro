@@ -1,0 +1,18 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur">
+  <nav class="mx-auto max-w-3xl flex items-center justify-between px-6 py-4">
+    <a href="/" class="text-xl font-bold text-[var(--color-text)] no-underline hover:text-[var(--color-primary)] transition-colors">
+      ~/blog
+    </a>
+    <div class="flex items-center gap-6 text-sm">
+      <a href="/" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">首页</a>
+      <a href="/tags" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">标签</a>
+      <a href="/search" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">搜索</a>
+      <a href="/about" class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] no-underline transition-colors">关于</a>
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>

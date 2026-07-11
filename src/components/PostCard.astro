@@ -1,0 +1,32 @@
+---
+import { formatDate } from '../utils/formatDate';
+import TagBadge from './TagBadge.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  slug: string;
+  readMinutes: number;
+}
+
+const { title, description, date, tags, slug, readMinutes } = Astro.props;
+---
+
+<article class="group border-b border-[var(--color-border)] last:border-b-0">
+  <a href={`/blog/${slug}`} class="block py-8 no-underline">
+    <div class="flex items-center gap-3 text-sm text-[var(--color-text-secondary)] mb-3">
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      <span>·</span>
+      <span>{readMinutes} 分钟阅读</span>
+    </div>
+    <h2 class="text-xl font-semibold text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors mb-2">
+      {title}
+    </h2>
+    <p class="text-[var(--color-text-secondary)] leading-relaxed mb-3">{description}</p>
+    <div class="flex flex-wrap gap-2">
+      {tags.map(tag => <TagBadge tag={tag} />)}
+    </div>
+  </a>
+</article>
